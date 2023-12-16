@@ -1,0 +1,13 @@
+<h1>{{ user.username }}</h1>
+<h3>{{ error }}</h3>
+{% for website in websites %}
+<p>{{ website.name }}</p> 
+<p>{{ website.url }}</p> 
+<a href='{% url 'proxy' website.name website.url %}' > Link</a>
+{% endfor %}
+
+<form method='POST'>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type='submit'>Add</button>
+</form>
