@@ -11,6 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from ..website.services import get_base_url
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
+from .tasks import send_email_task
 
 
 
@@ -35,11 +36,23 @@ class SignUpView(CreateView):
         form = self.form_class(request.POST)
         
         if form.is_valid():
-            user = form.save()
+            email = request.POST.get('email')
+
+            # subject = 'Thank you for registering!'
+            # message = f"Thank you for registering on our platform. We're excited to have you as a member of our community!\n\nBest regards,\nThe Team"
+            print('Message sent to', email)
+            # send_email_task.delay(subject, message, [email])
+
+
+
+            user = form.save(commit=False)
+            user.email = email
+            user.save()
             login(request, user)
             return redirect('login')
         else:
-            return render(request, self.template_name, {'form':form, 'error':'Please enter valid data :)'})
+            return render(request, self.template_name, {'form': form, 'error': 'Please enter valid data :)'})
+
 
 
 class StatsListView(View, LoginRequiredMixin):
@@ -98,23 +111,25 @@ class ProfileView(View, LoginRequiredMixin):
     template_name = 'user/profile.html'
 
     def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            websites = UserWebsite.objects.filter(user=request.user)
+            total_websites, total_received_data, total_sent_data, total_clicks = 0, 0, 0, 0
+            for website in websites:
+                total_websites += 1
+                total_received_data += website.data_received
+                total_sent_data += website.data_sent
+                total_clicks += website.clicks
 
-        websites = UserWebsite.objects.filter(user=request.user)
-        total_websites, total_received_data, total_sent_data, total_clicks = 0, 0, 0, 0
-        for website in websites:
-            total_websites += 1
-            total_received_data += website.data_received
-            total_sent_data += website.data_sent
-            total_clicks += website.clicks
+            context = {
+                'total_websites': total_websites,
+                'total_received_data': total_received_data,
+                'total_sent_data': total_sent_data,
+                'total_clicks': total_clicks
+            }
+            return render(request, self.template_name, context)
+        else:
+            return redirect('login')
 
-        context = {
-            'total_websites':total_websites,
-            'total_received_data':total_received_data,
-            'total_sent_data': total_sent_data,
-            'total_clicks':total_clicks
-
-        }
-        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         email = request.POST.get('email')

@@ -39,26 +39,12 @@ services:
     build:
       context: .
       dockerfile: ./Docker/local/Dockerfile
-    command: celery -A main worker -l info
+    command: celery -A vpn worker -l info
     volumes:
       - ./:/code
     depends_on:
       - backend
       - redis
-    networks:
-      - my_network
-
-  celery-beat:
-    build:
-      context: .
-      dockerfile: ./Docker/local/Dockerfile
-    command: celery -A main beat -l info
-    volumes:
-      - ./:/code
-    depends_on:
-      - backend
-      - redis
-      - db
     networks:
       - my_network
 

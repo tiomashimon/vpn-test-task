@@ -5,7 +5,7 @@
 {% if user.is_authenticated %}
 <p>Redirecting to <a href="{% url 'stats' %}">new page</a>...</p>
     <script>
-        window.location.href = "/food";
+        window.location.href = "/user/stats";
     </script>
 {% endif %}
 <div class="container">
@@ -19,7 +19,7 @@
         </div>
         <div class="form-group">
           <label for="{{ form.email.id_for_label }}">Email</label>
-          <input type="email" class="form-control" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}">
+          <input type="email" class="form-control" id="{{ form.email.id_for_label }}" name="email">
         </div>
         <div class="form-group">
           <label for="{{ form.password1.id_for_label }}">Password</label>
