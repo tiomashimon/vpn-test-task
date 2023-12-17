@@ -1,0 +1,103 @@
+{% extends "user/base.html" %}
+{% block title %}Profile Page{% endblock title %}
+{% block body %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="my-5">
+                <h3>My Profile</h3>
+                <hr>
+            </div>
+            <form class="file-upload" method='post' enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mb-5 gx-5">
+                    <div class="col-xxl-8 mb-5 mb-xxl-0">
+                        <div class="bg-secondary-soft px-4 py-5 rounded">
+                            <div class="row g-3">
+                                <h4 class="mb-4 mt-0">Contact detail</h4>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Username *</label>
+                                    <input type="text" class="form-control" placeholder="" aria-label="Username" value="{{ user.username }}" readonly>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="inputEmail4" class="form-label">Email *</label>
+                                    <input type="email" name='email' class="form-control" id="inputEmail4" value="{{ user.email }}">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">First Name *</label>
+                                    <input type="text" name='firstname' class="form-control" placeholder="" aria-label="First name" value="{{ user.first_name }}">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Last Name *</label>
+                                    <input type="text" name='lastname' class="form-control" placeholder="" aria-label="Last name" value="{{ user.last_name }}">
+                                </div>
+
+                                <div class="row">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Total Websites</th>
+                                                <th>Total Received Data</th>
+                                                <th>Total Sent Data</th>
+                                                <th>Total Clicks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ total_websites }}</td>
+                                                <td>{{ total_received_data|floatformat:3 }}</td>
+                                                <td>{{ total_sent_data|floatformat:3 }}</td>
+                                                <td>{{ total_clicks }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-4">
+                        <div class="bg-secondary-soft px-4 py-5 rounded">
+                            <div class="row g-3">
+                                <h4 class="mb-4 mt-0">Upload your profile photo</h4>
+                                <div class="text-center">
+
+                                    {% if user.profile.avatar %}
+                                        <img src="{{ user.profile.avatar.url }}" class="img-fluid" alt="Profile Photo">
+                                    {% else %}
+                                        <div class="square position-relative display-2 mb-3">
+                                            <i class="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
+                                        </div>
+                                    {% endif %}
+
+                                    <input type="file" id="customFile" name="profile_image" hidden="">
+                                    <label class="btn btn-success-soft btn-block" for="customFile">Upload</label>
+                                    <button type="button" class="btn btn-danger-soft">Remove</button>
+
+                                    <p class="text-muted mt-3 mb-0"><span class="me-1">Note:</span>Minimum size 300px x 300px</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="gap-3 d-md-flex justify-content-md-end text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">Update profile</button>
+                </div>
+
+                
+                
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

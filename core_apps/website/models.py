@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 
 class UserWebsite(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     url = models.CharField(max_length=255)  
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     clicks = models.IntegerField(default=0)

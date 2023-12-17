@@ -1,13 +1,63 @@
-<h1>{{ user.username }}</h1>
-<h3>{{ error }}</h3>
-{% for website in websites %}
-<p>{{ website.name }}</p> 
-<p>{{ website.url }}</p> 
-<a href='{% url 'proxy' website.name website.url %}' > Link</a>
-{% endfor %}
+{% extends "user/base.html" %}
+{% block title %}Stats{% endblock title %}
 
-<form method='POST'>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type='submit'>Add</button>
-</form>
+{% block body %}
+    <h1>{{ user.username }}</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>URL</th>
+                <th>Clicks</th>
+                <th>Data Sent</th>
+                <th>Data Received</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for website in websites %}
+                <tr>
+                    <td>{{ website.name }}</td>
+                    <td>{{ website.url }}</td>
+                    <td>{{ website.clicks }}</td>
+                    <td>{{ website.data_sent|floatformat:5 }} Mb</td>
+                    <td>{{ website.data_received|floatformat:5 }} Mb</td>                    
+                    <td>
+                        <a class="btn btn-primary" href='{% url 'proxy' website.name website.url %}'>Link</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>{{ error }}</h3>
+    <form method='POST' id='myForm'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type='submit' class='btn btn-success'>Add</button>
+    </form>
+    
+    <button type="button" class="btn btn-primary" id="generateName">Generate Name</button>
+    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        function generateRandomName() {
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var result = '';
+            var charactersLength = characters.length;
+            for (var i = 0; i < 16; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+
+        $('#generateName').click(function () {
+            var generatedName = generateRandomName();
+            $('#id_name').val(generatedName);
+        });
+    });
+</script>
+
+{% endblock body %}
