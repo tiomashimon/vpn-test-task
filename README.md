@@ -8,9 +8,9 @@ Installation Steps
 
 1.Clone the Repository
 
-git clone https://github.com/tiomashimon/Social-Media-Test-Task
+git clone https://github.com/tiomashimon/vpn-test-task
 
-cd Social-Media-Test-Task
+cd vpn-test-task
 
 2.Create Environment File
 
