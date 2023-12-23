@@ -8,9 +8,9 @@ Installation Steps
 
 1.Clone the Repository
 
-git clone https://github.com/tiomashimon/vpn-test-task.git
+git clone https://github.com/tiomashimon/Social-Media-Test-Task
 
-cd vpn-test-task
+cd Social-Media-Test-Task
 
 2.Create Environment File
 
@@ -34,9 +34,6 @@ POSTGRES_USER=task
 
 POSTGRES_DB=taskdb
 
-EMAIL_HOST_USER=teamchallangechat@ukr.net
-
-EMAIL_HOST_PASSWORD=gm7B5FpsJNDzWcPb
 
 3.Build Docker Images
 
